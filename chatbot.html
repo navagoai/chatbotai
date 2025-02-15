@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navago AI Travel Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #000;
+      color: #ffa500;
+    }
+    .sidebar {
+      width: 45%;
+      padding: 20px;
+      background-color: #111;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .header {
+      font-size: 32px;
+      font-weight: bold;
+      color: #ffa500;
+      margin-bottom: 20px;
+    }
+    .chat-box {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px;
+      border-radius: 12px;
+      background-color: #222;
+      max-height: 70vh;
+    }
+    .message {
+      padding: 10px;
+      border-radius: 12px;
+      margin: 5px 0;
+      max-width: 80%;
+    }
+    .user-message {
+      background-color: #ffa500;
+      color: #000;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .bot-message {
+      background-color: #333;
+      color: #ffa500;
+      align-self: flex-start;
+      text-align: left;
+    }
+    .prompt-input {
+      display: flex;
+      gap: 10px;
+      padding-top: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1px solid #ffa500;
+      background-color: #000;
+      color: #ffa500;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ffa500;
+      color: #000;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .image-section {
+      width: 55%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #000;
+    }
+    .overlay-text {
+      position: absolute;
+      top: 20%;
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      color: #ffa500;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+  <!-- Include the Marked library to render Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="header">NAVAGO</div>
+    <div class="chat-box" id="chat-box">
+      <div class="message bot-message">Hey, Navago here! Excited to help you with anything travel related.</div>
+    </div>
+    <div class="prompt-input">
+      <input type="text" id="user-input" placeholder="Ask anything, the more you share the better...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  
+  <div class="image-section" id="slider">
+    <div class="overlay-text">Navago AI Travel Assistant</div>
+  </div>
+
+  <script>
+    const imageUrls = [
+      'https://github.com/navagoai/navago/blob/main/1%20image.jpg?raw=true',
+      'https://github.com/navagoai/navago/blob/main/2%20image%20.jpg?raw=true',
+      'https://github.com/navagoai/navago/blob/main/3%20image%20.jpg?raw=true',
+      'https://github.com/navagoai/navago/blob/main/4image.jpg?raw=true'
+    ];
+
+    let currentIndex = 0;
+    const slider = document.getElementById('slider');
+
+    function showNextImage() {
+      slider.style.backgroundImage = `url(${imageUrls[currentIndex]})`;
+      slider.style.backgroundSize = 'cover';
+      slider.style.backgroundPosition = 'center';
+      currentIndex = (currentIndex + 1) % imageUrls.length;
+    }
+
+    showNextImage();
+    setInterval(showNextImage, 3000);
+
+    //මෙතනින් එහාට මුකුත් කරන්න එපා මේ බොට් ගේ ටික 
+
+
+    async function sendMessage() {
+      const userInput = document.getElementById("user-input").value;
+      if (!userInput.trim()) return;
+
+      const chatBox = document.getElementById("chat-box");
+
+      // User Message
+      const userMessage = document.createElement("div");
+      userMessage.classList.add("message", "user-message");
+      userMessage.textContent = userInput;
+      chatBox.appendChild(userMessage);
+
+      document.getElementById("user-input").value = "";
+
+      // Bot Loading Message
+      const botMessage = document.createElement("div");
+      botMessage.classList.add("message", "bot-message");
+      botMessage.textContent = "Typing...";
+      chatBox.appendChild(botMessage);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Get AI Response from your backend
+      try {
+        const response = await fetch("http://localhost:3000/send-message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: userInput })
+        });
+
+        const data = await response.json();
+        // Convert Markdown from the bot's response to HTML
+        botMessage.innerHTML = marked.parse(data.response || "Sorry, I couldn't understand that.");
+      } catch (error) {
+        botMessage.textContent = "Error connecting to AI service.";
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
