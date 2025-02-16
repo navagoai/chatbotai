@@ -134,8 +134,7 @@
     showNextImage();
     setInterval(showNextImage, 3000);
 
-    //මෙතනින් එහාට මුකුත් කරන්න එපා මේ බොට් ගේ ටික 
-
+    // Bot-related logic
 
     async function sendMessage() {
       const userInput = document.getElementById("user-input").value;
@@ -158,9 +157,9 @@
       chatBox.appendChild(botMessage);
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // Get AI Response from your backend
+      // Get AI Response from your backend (Heroku URL)
       try {
-        const response = await fetch("http://localhost:3000/send-message", {
+        const response = await fetch("https://navago-f1983278492b.herokuapp.com/send-message", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
