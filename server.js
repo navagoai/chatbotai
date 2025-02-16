@@ -3,7 +3,7 @@ const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Heroku port binding fix
 
 app.use(express.json());
 
@@ -56,5 +56,5 @@ app.post('/send-message', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on port ${port}`);
 });
