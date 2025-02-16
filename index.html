@@ -10,10 +10,10 @@
       margin: 0;
       padding: 0;
       display: flex;
+      flex-direction: column;
       height: 100vh;
       background-color: #000;
       color: #ffa500;
-      flex-direction: column;
     }
 
     .sidebar {
@@ -91,23 +91,31 @@
 
     .image-section {
       width: 100%;
+      height: 100vh;
       position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #000;
-      height: 200px;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      animation: fadeInOut 15s infinite;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
     }
 
     .overlay-text {
       position: absolute;
-      top: 20%;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
       font-size: 48px;
       font-weight: bold;
       color: #ffa500;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      transition: opacity 1s ease;
     }
 
     /* Media Query for smaller screens */
@@ -173,19 +181,21 @@
 
     let currentIndex = 0;
     const slider = document.getElementById('slider');
+    const overlayText = document.querySelector('.overlay-text');
 
     function showNextImage() {
       slider.style.backgroundImage = `url(${imageUrls[currentIndex]})`;
-      slider.style.backgroundSize = 'cover';
-      slider.style.backgroundPosition = 'center';
+      overlayText.style.opacity = 0; // Fade out text for transition
+      setTimeout(() => {
+        overlayText.style.opacity = 1; // Fade text back in after image change
+      }, 1000);
       currentIndex = (currentIndex + 1) % imageUrls.length;
     }
 
     showNextImage();
-    setInterval(showNextImage, 3000);
+    setInterval(showNextImage, 5000); // Change every 5 seconds
 
     // Bot-related logic
-
     async function sendMessage() {
       const userInput = document.getElementById("user-input").value;
       if (!userInput.trim()) return;
