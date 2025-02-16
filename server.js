@@ -3,7 +3,7 @@ const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
-const port = process.env.PORT || 3000; // Heroku port binding fix
+const port = process.env.PORT || 3000; // Use Heroku PORT or fallback to 3000
 
 app.use(express.json());
 
@@ -12,6 +12,11 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
+});
+
+// Root route to avoid 'Cannot GET /' error
+app.get('/', (req, res) => {
+    res.send('Welcome to NAVAGO - Your Travel Companion!');
 });
 
 // Initialize Gemini model
