@@ -9,32 +9,70 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
       background-color: #000;
       color: #ffa500;
-      box-sizing: border-box;
-    }
-
-    /* Chatbox */
-    .sidebar {
-      width: 30%;
-      min-width: 300px;
-      padding: 20px;
-      background-color: #111;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .header {
-      font-size: 32px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #111;
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 28px;
       font-weight: bold;
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-menu li {
+      margin: 0 15px;
+    }
+
+    .nav-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .nav-menu a:hover {
       color: #ffa500;
-      margin-bottom: 20px;
-      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      margin-top: 60px;
+    }
+
+    .chat-section {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      background-color: #111;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .chat-box {
@@ -43,8 +81,8 @@
       padding: 10px;
       border-radius: 12px;
       background-color: #222;
-      max-height: 70vh;
-      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
     }
 
     .message {
@@ -58,19 +96,16 @@
       background-color: #ffa500;
       color: #000;
       align-self: flex-end;
-      text-align: right;
     }
 
     .bot-message {
       background-color: #333;
       color: #ffa500;
       align-self: flex-start;
-      text-align: left;
     }
 
-    .prompt-input {
+    .input-area {
       display: flex;
-      gap: 10px;
       padding-top: 10px;
     }
 
@@ -92,15 +127,11 @@
       cursor: pointer;
     }
 
-    /* Image Section */
     .image-section {
-      width: 70%;
-      height: 100vh;
+      width: 50%;
       position: relative;
       background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      transition: background-image 1s ease-in-out;
+      background-position: center;
     }
 
     .overlay-text {
@@ -113,129 +144,67 @@
       font-weight: bold;
       color: #ffa500;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-      transition: opacity 1s ease;
-    }
-
-    /* Fade effect for images */
-    @keyframes fadeInOut {
-      0% { opacity: 0; }
-      50% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* Media Queries for Responsiveness */
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-
-      .sidebar {
-        width: 100%;
-        min-width: unset;
-        padding: 10px;
-      }
-
-      .image-section {
-        width: 100%;
-        height: 200px;
-      }
-
-      .overlay-text {
-        font-size: 24px;
-        top: 10%;
-      }
-
-      .header {
-        font-size: 24px;
-        margin-bottom: 10px;
-      }
-
-      .chat-box {
-        max-height: 50vh;
-      }
-
-      input[type="text"], button {
-        padding: 8px;
-      }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="header">NAVAGO</div>
-    <div class="chat-box" id="chat-box">
-      <div class="message bot-message">Hey, Navago here! Excited to help you with anything travel related.</div>
+  <header class="header">
+    <div class="logo">Navago.com</div>
+    <nav>
+      <ul class="nav-menu">
+        <li class="menu-item"><a href="navago.html">Home</a></li>
+        <li class="menu-item current-menu-item"><a href="about.html">About</a></li>
+        <li class="menu-item"><a href="services.html">Services</a></li>
+        <li class="menu-item"><a href="portfolio.html">Portfolio</a></li>
+        <li class="menu-item"><a href="test.html">Testimonials</a></li>
+        <li class="menu-item"><a href="blog.html">Blog</a></li>
+        <li class="menu-item"><a href="contact.html">Contact</a></li>
+        <li class="menu-item"><a href="contact.html"></a></li>
+    </ul>
+    </nav>
+  </header>
+  
+  <div class="container">
+    <div class="chat-section">
+      <div class="chat-box" id="chat-box">
+        <div class="message bot-message">Hey, Navago here! Excited to help you with anything travel related.</div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Ask anything...">
+        <button onclick="sendMessage()">Send</button>
+      </div>
     </div>
-    <div class="prompt-input">
-      <input type="text" id="user-input" placeholder="Ask anything, the more you share the better...">
-      <button onclick="sendMessage()">Send</button>
+    <div class="image-section" id="slider">
+      <div class="overlay-text">Navago AI Travel Assistant</div>
     </div>
   </div>
   
-  <div class="image-section" id="slider">
-    <div class="overlay-text">Navago AI Travel Assistant</div>
-  </div>
-
   <script>
-    const imageUrls = [
-      'https://github.com/navagoai/navago/blob/main/1%20image.jpg?raw=true',
-      'https://github.com/navagoai/navago/blob/main/2%20image%20.jpg?raw=true',
-      'https://github.com/navagoai/navago/blob/main/3%20image%20.jpg?raw=true',
-      'https://github.com/navagoai/navago/blob/main/4image.jpg?raw=true'
-    ];
-
-    let currentIndex = 0;
-    const slider = document.getElementById('slider');
-    const overlayText = document.querySelector('.overlay-text');
-
-    function showNextImage() {
-      slider.style.backgroundImage = `url(${imageUrls[currentIndex]})`;
-      overlayText.style.opacity = 0; // Fade out text for transition
-      setTimeout(() => {
-        overlayText.style.opacity = 1; // Fade text back in after image change
-      }, 1000);
-      currentIndex = (currentIndex + 1) % imageUrls.length;
-    }
-
-    showNextImage();
-    setInterval(showNextImage, 5000); // Change every 5 seconds
-
-    // Bot-related logic
     async function sendMessage() {
       const userInput = document.getElementById("user-input").value;
       if (!userInput.trim()) return;
 
       const chatBox = document.getElementById("chat-box");
-
-      // User Message
       const userMessage = document.createElement("div");
       userMessage.classList.add("message", "user-message");
       userMessage.textContent = userInput;
       chatBox.appendChild(userMessage);
-
       document.getElementById("user-input").value = "";
 
-      // Bot Loading Message
       const botMessage = document.createElement("div");
       botMessage.classList.add("message", "bot-message");
       botMessage.textContent = "Typing...";
       chatBox.appendChild(botMessage);
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // Get AI Response from your backend (Heroku URL)
       try {
         const response = await fetch("https://navago-f1983278492b.herokuapp.com/send-message", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: userInput })
         });
-
         const data = await response.json();
-        // Convert Markdown from the bot's response to HTML
-        botMessage.innerHTML = marked.parse(data.response || "Sorry, I couldn't understand that.");
+        botMessage.textContent = data.response || "Sorry, I couldn't understand that.";
       } catch (error) {
         botMessage.textContent = "Error connecting to AI service.";
       }
